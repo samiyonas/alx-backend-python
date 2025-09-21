@@ -6,11 +6,11 @@ def paginate_users(page_size, offset):
 
     try:
         with connection.cursor() as cursor:
-            cursor.execute(query, (pagesize, offset))
-
-            yield cursor.fetchall()
+            cursor.execute(query, (page_size, offset))
+            return cursor.fetchall()
     except Exception as e:
         print(e)
+        return []
     
 
 def lazypaginate(pagesize):
