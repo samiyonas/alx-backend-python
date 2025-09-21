@@ -25,3 +25,5 @@ def batch_processing(batch_size):
             if row[-1] > 25:
                 filtered_by_age.append(row)
         yield filtered_by_age
+
+    return
