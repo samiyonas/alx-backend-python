@@ -1,6 +1,6 @@
 seed = __import__("seed")
 
-def paginate_users(pagesize, offset):
+def paginate_users(page_size, offset):
     connection = seed.connect_to_prodev()
     query = "SELECT * FROM user_data LIMIT %s OFFSET %s"
 
