@@ -7,8 +7,12 @@ query_cache = {}
 
 def with_db_connection(func):
     def wrapper(*args, **kwargs):
-        conn = sqlite3.connect('users.db')
-        return func(conn, *args, **kwargs)
+        try:
+            conn = sqlite3.connect('users.db')
+            return func(conn, *args, **kwargs)
+        except Exception:
+            conn.close()
+            raise
     return wrapper
 
 def cache_query(func):
@@ -18,8 +22,6 @@ def cache_query(func):
             return query_cache[kwargs.get('query')] 
         except Exception:
             raise
-        finally:
-            args[0].close()
     return wrapper
 
 @with_db_connection
@@ -31,6 +33,7 @@ def fetch_users_with_cache(conn, query):
 
 #### First call will cache the result
 users = fetch_users_with_cache(query="SELECT * FROM users")
-
+print(query_cache)
 #### Second call will use the cached result
 users_again = fetch_users_with_cache(query="SELECT * FROM users")
+print(query_cache)
