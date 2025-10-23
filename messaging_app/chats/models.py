@@ -21,16 +21,6 @@ class user(models.Model):
             models.Index(fields=["email"])
         ]
 
-class Message(models.Model):
-    message_id = models.UUIDField(primary_key=True, default=uuid.uuid4)
-    sender_id = models.ForeignKey(
-        user,
-        on_delete=models.PROTECT,
-        related_name="messages"
-    )
-    message_body = models.TextField(null=False)
-    sent_at = models.DateTimeField(auto_now_add=True)
-
 class Conversation(models.Model):
     conversation_id = models.UUIDField(primary_key=True, default=uuid.uuid4)
     participants_id = models.ForeignKey(
@@ -39,3 +29,18 @@ class Conversation(models.Model):
         related_name="conversations"
     )
     created_at = models.DateTimeField(auto_now_add=True)
+
+class Message(models.Model):
+    message_id = models.UUIDField(primary_key=True, default=uuid.uuid4)
+    sender_id = models.ForeignKey(
+        user,
+        on_delete=models.PROTECT,
+        related_name="messages"
+    )
+    conversation_id = models.ForeignKey(
+        Conversation,
+        on_delete = models.CASCADE,
+        related_name='messages'
+    )
+    message_body = models.TextField(null=False)
+    sent_at = models.DateTimeField(auto_now_add=True)
